@@ -11,10 +11,11 @@
       "locale": "ru",
       "baseUrl": ".",
       "paths": {
-        "src/*": ["src/*"]
+        "@STORE/*": ["./src/store/*"],
       }
     },
     "include": ["src"],
+    "exclude": ["node_modules"],
     "compileOnSave": false
   }
   

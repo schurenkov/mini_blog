@@ -36,6 +36,7 @@ module.exports = {
     alias: {
       src: PATHS.src,
       'react-dom': '@hot-loader/react-dom',
+      '@STORE': PATHS.src + '/store',
     },
   },
 };

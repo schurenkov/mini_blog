@@ -1,5 +1,6 @@
 
-const Post = require('../models/post-model')
+const Post = require('../models/post-model');
+const {ObjectId} = require('mongodb')
 
 createPost = (req, res) => {
     const body = req.body
@@ -23,6 +24,7 @@ createPost = (req, res) => {
             return res.status(201).json({
                 success: true,
                 id: post._id,
+                createdAt: post.createdAt,
                 message: 'Post created!',
             })
         })
@@ -36,7 +38,8 @@ createPost = (req, res) => {
 
 
 deletePost = async (req, res) => {
-    await Post.findOneAndDelete({ _id: req.params.id }, (err, post) => {
+    await Post.findOneAndDelete({ _id: ObjectId(req.params.id) }, (err, post) => {
+        console.log(err, post)
         if (err) {
             return res.status(400).json({ success: false, error: err })
         }

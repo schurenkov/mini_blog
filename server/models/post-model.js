@@ -1,12 +1,13 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
+const {ObjectId} = mongoose;
 
 const Post = new Schema(
     {
-        autor: { type: String, required: true },
+        authorId: { type: ObjectId, required: true },
         text: { type: String, required: true },
     },
     { timestamps: true },
 )
 
-module.exports = mongoose.model('blog', Post)
+module.exports = mongoose.model('posts', Post)

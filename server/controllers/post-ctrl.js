@@ -1,8 +1,7 @@
+import Post from '../models/post-model';
+import {ObjectId} from 'mongodb';
 
-const Post = require('../models/post-model');
-const {ObjectId} = require('mongodb')
-
-createPost = (req, res) => {
+const createPost = (req, res) => {
     const body = req.body
 
     if (!body) {
@@ -37,9 +36,8 @@ createPost = (req, res) => {
 }
 
 
-deletePost = async (req, res) => {
+const deletePost = async (req, res) => {
     await Post.findOneAndDelete({ _id: ObjectId(req.params.id) }, (err, post) => {
-        console.log(err, post)
         if (err) {
             return res.status(400).json({ success: false, error: err })
         }
@@ -55,7 +53,7 @@ deletePost = async (req, res) => {
 }
 
 
-getPosts = async (req, res) => {
+const getPosts = async (req, res) => {
     await Post.find({}, (err, posts) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
@@ -63,13 +61,13 @@ getPosts = async (req, res) => {
         if (!posts.length) {
             return res
                 .status(404)
-                .json({ success: false, error: `Post not found` })
+                .json({ success: false, error: `Posts not found` })
         }
         return res.status(200).json({ success: true, data: posts })
     }).catch(err => console.log(err))
 }
 
-module.exports = {
+export default {
     createPost,
     deletePost,
     getPosts,

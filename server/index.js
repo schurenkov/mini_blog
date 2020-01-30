@@ -1,9 +1,9 @@
-const express = require('express')
-const bodyParser = require('body-parser')
-const cors = require('cors')
+import express from 'express';
+import bodyParser from 'body-parser';
+import cors from 'cors';
 
-const db = require('./db')
-const postRouter = require('./routes/post-router')
+import db from './db';
+import router from './routes';
 
 const app = express()
 const apiPort = 5000
@@ -18,6 +18,6 @@ app.get('/', (req, res) => {
     res.send('Hello World!')
 })
 
-app.use('/api', postRouter)
+app.use('/api', router)
 
 app.listen(apiPort, () => console.log(`Server running on port ${apiPort}`))

@@ -6,7 +6,7 @@
   "scripts": {
     "client": "cd client && npm run start --prefix client",
     "server": "cd server && nodemon index.js",
-    "heroku-postbuild": "cd client && npm install && npm run build && cd .. && cd server && npm install && nodemon index.js"
+    "heroku-postbuild": "cd client && yarn install --production=false && yarn build && cd .. && cd server && yarn install --production=false && nodemon index.js"
   },
   "keywords": [],
   "author": "AlekseiShchurenkov",

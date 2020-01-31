@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
 const TerserPlugin = require('terser-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
 
 const merge = require('webpack-merge');
 const baseWebpackConfig = require('./webpack.base.config');
@@ -12,7 +13,7 @@ const buildWebpackConfig = merge(baseWebpackConfig, {
     minimizer: [new TerserPlugin()],
   },
   output: {
-    path: path.join(__dirname, '../'),
+    path: path.join(__dirname, '../../'),
     publicPath: '/',
     filename: 'bundle.js',
   },

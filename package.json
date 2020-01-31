@@ -1,6 +1,14 @@
 {
-  "devDependencies": {},
-  "dependencies": {
-    "dayjs": "^1.8.19"
-  }
+  "name": "mini-blog",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./server/index.js",
+  "scripts": {
+    "client": "cd client && npm run start --prefix client",
+    "server": "cd server && nodemon index.js",
+    "heroku-postbuild": "cd client && npm install && npm run build && cd .. && cd server && npm install && nodemon index.js"
+  },
+  "keywords": [],
+  "author": "AlekseiShchurenkov",
+  "license": "ISC"
 }

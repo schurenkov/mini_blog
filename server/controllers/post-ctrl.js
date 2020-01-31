@@ -11,11 +11,7 @@ const createPost = (req, res) => {
         })
     }
 
-    const post = new Post(body)
-
-    if (!post) {
-        return res.status(400).json({ success: false, error: err })
-    }
+    const post = new Post(body);
 
     post
         .save()
@@ -33,7 +29,7 @@ const createPost = (req, res) => {
                 message: 'Post not created!',
             })
         })
-}
+};
 
 
 const deletePost = async (req, res) => {
@@ -50,22 +46,19 @@ const deletePost = async (req, res) => {
 
         return res.status(200).json({ success: true, data: post })
     }).catch(err => console.log(err))
-}
+};
 
 
 const getPosts = async (req, res) => {
-    await Post.find({}, (err, posts) => {
-        if (err) {
-            return res.status(400).json({ success: false, error: err })
-        }
-        if (!posts.length) {
-            return res
-                .status(404)
-                .json({ success: false, error: `Posts not found` })
-        }
+    try {
+        const posts = await Post.find().populate("author", 'name');
+
         return res.status(200).json({ success: true, data: posts })
-    }).catch(err => console.log(err))
-}
+
+    } catch (err) {
+        return res.status(400).json({ success: false, error: err })
+    }
+};
 
 export default {
     createPost,

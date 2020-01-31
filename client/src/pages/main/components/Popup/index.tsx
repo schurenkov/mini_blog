@@ -6,21 +6,28 @@ import { createPost } from '@STORE/post/actions';
 import { connect } from 'react-redux';
 import './style.scss';
 import axios from 'axios';
+import { IProps, ILocalAuthor } from './types';
+import { IAuthor } from '@STORE/user/types';
 
-const Popup: FC<any> = ({ handlerCreatePost }) => {
+const Popup: FC<IProps> = ({ handlerCreatePost }) => {
   const maxCount = useRef(512);
-  const [popup, usePopup] = useState(false);
-  const [text, useModel] = useState('');
-  const [auth, useAuth] = useState('');
-  const [user, useUser] = useState({ name: '', surname: '', biography: '' });
+  const [popup, usePopup] = useState<boolean>(false);
+  const [text, useModel] = useState<string>('');
+  const [auth, useAuth] = useState<ILocalAuthor>({ _id: '', name: '' });
+  const [user, useUser] = useState<IAuthor>({ name: '', surname: '', biography: '' });
 
   useEffect(() => {
-    useAuth(localStorage.getItem('authorId'));
+    const author: string = localStorage.getItem('author');
+
+    if (author) {
+      useAuth(JSON.parse(author));
+    }
   }, []);
 
   const handlerSend = () => {
-    if (auth) {
-      handlerCreatePost({ text, authorId: auth });
+    if (auth._id.length > 0) {
+      handlerCreatePost({ text, author: auth });
+      useModel('')
     } else {
       createUser();
     }
@@ -31,28 +38,31 @@ const Popup: FC<any> = ({ handlerCreatePost }) => {
   const createUser = async () => {
     try {
       const author = await axios.post('/api/author', user);
-      useAuth(author.data.id);
-      localStorage.setItem('authorId', author.data.id);
+      await useAuth({ _id: author.data.id, name: author.data.name });
+      localStorage.setItem('author', JSON.stringify({ _id: author.data.id, name: author.data.name }));
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   };
 
-  const handlerUserModel = (event, type) => {
-    const value = event.target.value
+  const handlerUserModel = (
+    event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>,
+    type: string
+  ) => {
+    const value = event.target.value;
     useUser(prev => ({ ...prev, [type]: value }));
   };
 
   return (
     <div>
-      <button onClick={() => usePopup(true)}>{auth ? 'Create post' : 'Create user'}</button>
+      <button onClick={() => usePopup(true)}>{auth._id.length > 0 ? 'Create post' : 'Create user'}</button>
       {popup && (
         <div className="popup">
           <div className="popup__wrap">
             <div className="popup__close" onClick={() => usePopup(false)} />
             <div className="popup__content">
-              <h3>{auth ? 'Create post' : 'Create user'}</h3>
-              {auth ? (
+              <h3>{auth._id.length > 0 ? 'Create post' : 'Create user'}</h3>
+              {auth._id.length > 0 ? (
                 <>
                   <textarea
                     maxLength={maxCount.current}
@@ -89,12 +99,8 @@ const Popup: FC<any> = ({ handlerCreatePost }) => {
               )}
             </div>
             <div className="popup__wrap-btn">
-              <button
-                className="popup__btn"
-                disabled={false}
-                onClick={handlerSend}
-              >
-                {auth ? 'Send' : 'Create'}
+              <button className="popup__btn" disabled={false} onClick={handlerSend}>
+                {auth._id.length > 0 ? 'Send' : 'Create'}
               </button>
             </div>
           </div>
@@ -105,7 +111,7 @@ const Popup: FC<any> = ({ handlerCreatePost }) => {
 };
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, void, Action>) => ({
-  handlerCreatePost: (model: any) => dispatch(createPost(model)),
+  handlerCreatePost: (model: { author: ILocalAuthor; text: string }) => dispatch(createPost(model)),
 });
 
 export default connect(null, mapDispatchToProps)(Popup);

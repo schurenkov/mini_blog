@@ -4,11 +4,11 @@ export enum UserActionTypes {
 }
 
 export interface IAuthor {
-  _id: string;
   name: string;
   surname: string;
   biography: string;
-  createdAt: string;
+  createdAt?: string;
+  _id?: string;
 }
 
 export interface IUserState {

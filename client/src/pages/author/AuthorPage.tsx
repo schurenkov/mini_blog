@@ -1,9 +1,15 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useRef } from 'react';
 import { IPost } from '@STORE/post/types';
 import Post from '../main/components/Post';
+import { IProps } from './types';
 
-const AuthorPage: FC<any> = ({ match, handlerGetUser, loading, author, posts }) => {
+const AuthorPage: FC<IProps> = ({ match, handlerGetUser, loading, author, posts, handlerDeletePost }) => {
+  const authorStorage = useRef({ _id: '', name: '' });
   useEffect(() => {
+    const authorLocalStorage = localStorage.getItem('author');
+    if (authorLocalStorage) {
+      authorStorage.current = JSON.parse(authorLocalStorage);
+    }
     if (match.params.id) {
       handlerGetUser(match.params.id);
     }
@@ -24,7 +30,12 @@ const AuthorPage: FC<any> = ({ match, handlerGetUser, loading, author, posts }) 
           <div className="author__posts">
             <h2>Posts: {posts.length}</h2>
             {posts.map((p: IPost) => (
-              <Post key={p._id} data={p} />
+              <Post
+                key={p._id}
+                data={p}
+                deleteShow={authorStorage.current._id === p.author._id}
+                handlerDeletePost={handlerDeletePost}
+              />
             ))}
           </div>
         </div>

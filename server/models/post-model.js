@@ -1,13 +1,13 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+import mongoose from 'mongoose';
+const Schema = mongoose.Schema;
 const {ObjectId} = mongoose;
 
 const Post = new Schema(
     {
-        authorId: { type: ObjectId, required: true },
+        author: { type: ObjectId, required: true, ref: 'authors' },
         text: { type: String, required: true },
     },
     { timestamps: true },
-)
+);
 
-module.exports = mongoose.model('posts', Post)
+export default mongoose.model('posts', Post)

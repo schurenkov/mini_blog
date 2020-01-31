@@ -24,6 +24,6 @@ export const getUser = (id): ThunkAction<void, AppState, void, AnyAction> => asy
       dispatch(getPosts());
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };

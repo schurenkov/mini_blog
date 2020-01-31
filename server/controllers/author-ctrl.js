@@ -1,8 +1,8 @@
 import {ObjectId} from 'mongodb';
-const Author = require('../models/author-model');
+import Author from '../models/author-model';
 
 const createAuthor = (req, res) => {
-    const body = req.body
+    const body = req.body;
 
     if (!body) {
         return res.status(400).json({
@@ -11,11 +11,7 @@ const createAuthor = (req, res) => {
         })
     }
 
-    const author = new Author(body)
-
-    if (!author) {
-        return res.status(400).json({ success: false, error: err })
-    }
+    const author = new Author(body);
 
     author
         .save()
@@ -23,6 +19,7 @@ const createAuthor = (req, res) => {
             return res.status(201).json({
                 success: true,
                 id: author._id,
+                name: author.name,
                 message: 'Author created!',
             })
         })
@@ -32,7 +29,7 @@ const createAuthor = (req, res) => {
                 message: 'Author not created!',
             })
         })
-}
+};
 
 const getAuthor = async (req, res) => {
     await Author.findOne({ _id: ObjectId(req.params.id)}, (err, author) => {
@@ -47,7 +44,7 @@ const getAuthor = async (req, res) => {
         return res.status(200).json({ success: true, data: author })
     }).catch(err => console.log(err))
 
-}
+};
 
 export default {
     createAuthor,

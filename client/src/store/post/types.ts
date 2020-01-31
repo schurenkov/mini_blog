@@ -8,7 +8,10 @@ export enum PostActionTypes {
 }
 
 export interface IPost {
-  authorId: string;
+  author: {
+    _id: string;
+    name: string;
+  };
   text: string;
   _id?: string;
   createdAt?: string;

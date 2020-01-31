@@ -1,16 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { IPost } from '@STORE/post/types';
 import Post from './components/Post';
 import dayjs from 'dayjs';
+import IProps from './types';
 
-const MainPage = ({ loading, posts, handlerGetPost }) => {
-  const [search, useSearch] = useState('');
-  const [searchAuthor, useSearchAuthor] = useState('');
-  const [filters, useFilters] = useState({
+const MainPage: FC<IProps> = ({ loading, posts, handlerGetPost, handlerDeletePost }) => {
+  const author = useRef({ _id: '', name: ''});
+  const [search, useSearch] = useState<string>('');
+  const [searchAuthor, useSearchAuthor] = useState<string>('');
+  const [filters, useFilters] = useState<{ start: string; end: string }>({
     start: '',
     end: '',
   });
   useEffect(() => {
+    const authorStorage: string = localStorage.getItem('author');
+    if (authorStorage) {
+      author.current = JSON.parse(authorStorage);
+    }
     handlerGetPost();
   }, []);
 
@@ -34,7 +40,7 @@ const MainPage = ({ loading, posts, handlerGetPost }) => {
     }
 
     if (searchAuthor.length > 0) {
-      copyPosts = copyPosts.filter(f => f.author.indexOf(searchAuthor) !== -1);
+      copyPosts = copyPosts.filter(f => f.author.name.indexOf(searchAuthor) !== -1);
     }
 
     return copyPosts;
@@ -51,8 +57,14 @@ const MainPage = ({ loading, posts, handlerGetPost }) => {
           <div className="main__posts">
             <h2>Posts: {arrayPosts.length}</h2>
             {arrayPosts.map((p: IPost) => (
-              <Post key={p._id} data={p} />
+              <Post
+                key={p._id}
+                data={p}
+                deleteShow={author.current._id === p.author._id}
+                handlerDeletePost={handlerDeletePost}
+              />
             ))}
+            {arrayPosts.length === 0 && <p>No posts.</p>}
           </div>
           <div className="main__filters">
             <h2>Filters</h2>

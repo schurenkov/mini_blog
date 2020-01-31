@@ -6,7 +6,7 @@ import rootReducer from './reducers';
 const createStoreWithMiddleware = composeWithDevTools(applyMiddleware(thunkMiddleware))(createStore);
 
 function configureStore(initialState?: {}) {
-    return createStoreWithMiddleware(rootReducer, initialState);
+  return createStoreWithMiddleware(rootReducer, initialState);
 }
 
 export const store = configureStore();

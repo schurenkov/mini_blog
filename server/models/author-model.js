@@ -1,5 +1,5 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+import mongoose from 'mongoose';
+const Schema = mongoose.Schema;
 
 const Author = new Schema(
     {
@@ -8,6 +8,6 @@ const Author = new Schema(
         biography: { type: String, required: false },
     },
     { timestamps: true },
-)
+);
 
-module.exports = mongoose.model('authors', Author)
+export default mongoose.model('authors', Author);

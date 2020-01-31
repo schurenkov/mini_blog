@@ -20,4 +20,6 @@ app.get('/', (req, res) => {
 
 app.use('/api', router);
 
+app.use(express.static(__dirname + '/'));
+
 app.listen(apiPort, () => console.log(`Server running on port ${apiPort}`));

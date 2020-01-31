@@ -12,11 +12,6 @@ const buildWebpackConfig = merge(baseWebpackConfig, {
   optimization: {
     minimizer: [new TerserPlugin()],
   },
-  output: {
-    path: path.join(__dirname, '../../'),
-    publicPath: '/',
-    filename: 'bundle.js',
-  },
   devtool: 'source-map',
   plugins: [
     new HtmlWebpackPlugin({

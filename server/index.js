@@ -6,7 +6,7 @@ import db from './db';
 import router from './routes';
 
 const app = express();
-const apiPort = 8080;
+const apiPort = process.env.PORT || 5000;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());

@@ -2,11 +2,12 @@
   "name": "mini-blog",
   "version": "1.0.0",
   "description": "",
-  "main": "./server/index.js",
+  "main": "index.js",
   "scripts": {
     "client": "cd client && npm run start --prefix client",
     "server": "cd server && nodemon index.js",
-    "heroku-postbuild": "cd client && yarn install --production=false && yarn build && cd .. && cd server && yarn install --production=false && yarn dev"
+    "heroku-postbuild": "cd client && yarn install --production=false && yarn build && cd .. && cd server && yarn install --production=false",
+    "start": "cd server && yarn dev"
   },
   "keywords": [],
   "author": "AlekseiShchurenkov",

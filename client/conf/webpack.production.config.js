@@ -2,7 +2,6 @@ const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
 const TerserPlugin = require('terser-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const path = require('path');
 
 const merge = require('webpack-merge');
 const baseWebpackConfig = require('./webpack.base.config');

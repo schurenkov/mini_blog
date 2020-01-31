@@ -5,17 +5,16 @@
       "esModuleInterop": true,
       "resolveJsonModule": true,
       "experimentalDecorators": true,
-      "target": "es2017",
+      "target": "es5",
       "jsx": "react",
       "lib": ["dom", "es6", "es2017"],
       "locale": "ru",
       "baseUrl": ".",
       "paths": {
-        "@STORE/*": ["./src/store/*"],
+        "@STORE/*": ["./src/store/*"]
       }
     },
     "include": ["src"],
     "exclude": ["node_modules"],
     "compileOnSave": false
   }
-  

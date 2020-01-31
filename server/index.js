@@ -1,6 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import path from 'path';
 
 import db from './db';
 import router from './routes';
@@ -15,7 +16,7 @@ app.use(bodyParser.json());
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 app.get('/', (req, res) => {
-    res.send('Hello World!')
+    res.sendFile(path.join(__dirname + '/index.html'));
 });
 
 app.use('/api', router);

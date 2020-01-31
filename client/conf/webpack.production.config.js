@@ -12,7 +12,7 @@ const buildWebpackConfig = merge(baseWebpackConfig, {
     minimizer: [new TerserPlugin()],
   },
   output: {
-    path: '../',
+    path: path.join(__dirname, '../'),
     publicPath: '/',
     filename: 'bundle.js',
   },

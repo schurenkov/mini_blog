@@ -1,17 +1,7 @@
 export enum UserActionTypes {
-  GET_USER = '@@post/GET_USER',
-  GET_USER_SUCCESS = '@@post/GET_USER_SUCCESS',
+  GET_USER = '@@user/GET_USER',
 }
-
-export interface IAuthor {
-  name: string;
-  surname: string;
-  biography: string;
-  createdAt?: string;
-  _id?: string;
-}
-
 export interface IUserState {
-  loading: boolean;
-  author: IAuthor;
+  _id: string;
+  name: string;
 }

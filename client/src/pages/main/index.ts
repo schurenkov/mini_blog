@@ -6,7 +6,8 @@ import { ThunkDispatch } from 'redux-thunk';
 import MainPage from './MainPage';
 import './style.scss';
 
-const mapStateToProps = ({ postState }: AppState) => ({
+const mapStateToProps = ({ postState, userState }: AppState) => ({
+  user: userState,
   loading: postState.loading,
   posts: postState.posts,
 });

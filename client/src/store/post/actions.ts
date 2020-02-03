@@ -3,7 +3,6 @@ import { ThunkAction } from 'redux-thunk';
 import { AppState } from '@STORE/reducers';
 import { PostActionTypes } from './types';
 import axios from 'axios';
-import { ILocalAuthor } from '../../pages/main/components/Popup/types';
 
 export const getPosts = (): ThunkAction<void, AppState, void, AnyAction> => async (dispatch: Dispatch) => {
   try {
@@ -17,22 +16,23 @@ export const getPosts = (): ThunkAction<void, AppState, void, AnyAction> => asyn
   }
 };
 
-export const createPost = (model: {
-  author: ILocalAuthor;
-  text: string;
-}): ThunkAction<void, AppState, void, AnyAction> => async (dispatch: Dispatch, getState) => {
+export const createPost = (text: string): ThunkAction<void, AppState, void, AnyAction> => async (
+  dispatch: Dispatch,
+  getState
+) => {
   try {
     const {
       postState: { posts },
+      userState,
     }: AppState = getState();
 
     dispatch({ type: PostActionTypes.CREATE_POST });
 
-    const response = await axios.post('/api/post', model);
+    const response = await axios.post('/api/post', { text, author: userState._id });
 
     dispatch({
       type: PostActionTypes.CREATE_POST_SUCCESS,
-      payload: [...posts, { _id: response.data.id, createdAt: response.data.createdAt, ...model }],
+      payload: [...posts, { _id: response.data.id, createdAt: response.data.createdAt, text: text, author: userState }],
     });
   } catch (error) {
     console.error(error);

@@ -2,14 +2,8 @@ import { Reducer } from 'redux';
 import { UserActionTypes, IUserState } from './types';
 
 const initialState = {
-  loading: false,
-  author: {
-    _id: '',
-    name: '',
-    surname: '',
-    biography: '',
-    createdAt: '',
-  },
+  _id: '',
+  name: '',
 };
 
 const UserState: Reducer<IUserState> = (state = initialState, action) => {
@@ -17,14 +11,7 @@ const UserState: Reducer<IUserState> = (state = initialState, action) => {
     case UserActionTypes.GET_USER: {
       return {
         ...state,
-        loading: true,
-      };
-    }
-    case UserActionTypes.GET_USER_SUCCESS: {
-      return {
-        ...state,
-        loading: false,
-        author: action.payload,
+        ...action.payload,
       };
     }
 

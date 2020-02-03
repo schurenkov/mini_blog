@@ -1,7 +1,8 @@
-import { getUser } from '@STORE/user/actions';
+import {getAuthor} from '@STORE/author/actions';
 import { IPost } from '@STORE/post/types';
-import { IAuthor } from '@STORE/user/types';
+import { IAuthor } from '@STORE/author/types';
 import {deletePost} from "@STORE/post/actions";
+import {IUserState} from "@STORE/user/types";
 
 export interface IMatch<P> {
   params: P;
@@ -12,9 +13,10 @@ export interface IMatch<P> {
 
 export interface IProps {
   match: IMatch<{ id: string }>;
-  handlerGetUser: typeof getUser;
+  handlerAuthorUser: typeof getAuthor;
   loading: boolean;
   posts: IPost[];
   author: IAuthor;
   handlerDeletePost: typeof deletePost;
+  user: IUserState;
 }

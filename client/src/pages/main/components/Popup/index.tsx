@@ -5,44 +5,30 @@ import { Action } from 'redux';
 import { createPost } from '@STORE/post/actions';
 import { connect } from 'react-redux';
 import './style.scss';
-import axios from 'axios';
-import { IProps, ILocalAuthor } from './types';
-import { IAuthor } from '@STORE/user/types';
+import { IProps } from './types';
+import { IAuthor } from '@STORE/author/types';
+import { createUser } from '@STORE/user/actions';
 
-const Popup: FC<IProps> = ({ handlerCreatePost }) => {
+const Popup: FC<IProps> = ({ user, handlerCreatePost, handlerCreateUser }) => {
   const maxCount = useRef(512);
   const [popup, usePopup] = useState<boolean>(false);
   const [text, useModel] = useState<string>('');
-  const [auth, useAuth] = useState<ILocalAuthor>({ _id: '', name: '' });
-  const [user, useUser] = useState<IAuthor>({ name: '', surname: '', biography: '' });
+  const [userModel, useUserModel] = useState<IAuthor>({ name: '', surname: '', biography: '' });
+  const [auth, useAuth] = useState<boolean>(false);
 
   useEffect(() => {
-    const author: string = localStorage.getItem('author');
-
-    if (author) {
-      useAuth(JSON.parse(author));
-    }
-  }, []);
+    useAuth(user._id.length > 0);
+  }, [user]);
 
   const handlerSend = () => {
-    if (auth._id.length > 0) {
-      handlerCreatePost({ text, author: auth });
-      useModel('')
+    if (auth) {
+      handlerCreatePost(text);
+      useModel('');
     } else {
-      createUser();
+      handlerCreateUser(userModel);
     }
 
     usePopup(false);
-  };
-
-  const createUser = async () => {
-    try {
-      const author = await axios.post('/api/author', user);
-      await useAuth({ _id: author.data.id, name: author.data.name });
-      localStorage.setItem('author', JSON.stringify({ _id: author.data.id, name: author.data.name }));
-    } catch (e) {
-      console.error(e);
-    }
   };
 
   const handlerUserModel = (
@@ -50,19 +36,19 @@ const Popup: FC<IProps> = ({ handlerCreatePost }) => {
     type: string
   ) => {
     const value = event.target.value;
-    useUser(prev => ({ ...prev, [type]: value }));
+    useUserModel(prev => ({ ...prev, [type]: value }));
   };
 
   return (
     <div>
-      <button onClick={() => usePopup(true)}>{auth._id.length > 0 ? 'Create post' : 'Create user'}</button>
+      <button onClick={() => usePopup(true)}>{auth ? 'Create post' : 'Create author'}</button>
       {popup && (
         <div className="popup">
           <div className="popup__wrap">
             <div className="popup__close" onClick={() => usePopup(false)} />
             <div className="popup__content">
-              <h3>{auth._id.length > 0 ? 'Create post' : 'Create user'}</h3>
-              {auth._id.length > 0 ? (
+              <h3>{auth ? 'Create post' : 'Create author'}</h3>
+              {auth ? (
                 <>
                   <textarea
                     maxLength={maxCount.current}
@@ -79,19 +65,19 @@ const Popup: FC<IProps> = ({ handlerCreatePost }) => {
                   <div className="popup__users">
                     <input
                       type="text"
-                      value={user.name}
+                      value={userModel.name}
                       placeholder="Name"
                       onChange={event => handlerUserModel(event, 'name')}
                     />
                     <input
                       type="text"
-                      value={user.surname}
+                      value={userModel.surname}
                       placeholder="Surname"
                       onChange={event => handlerUserModel(event, 'surname')}
                     />
                   </div>
                   <textarea
-                    value={user.biography}
+                    value={userModel.biography}
                     placeholder="Bio"
                     onChange={event => handlerUserModel(event, 'biography')}
                   />
@@ -100,7 +86,7 @@ const Popup: FC<IProps> = ({ handlerCreatePost }) => {
             </div>
             <div className="popup__wrap-btn">
               <button className="popup__btn" disabled={false} onClick={handlerSend}>
-                {auth._id.length > 0 ? 'Send' : 'Create'}
+                {auth ? 'Send' : 'Create'}
               </button>
             </div>
           </div>
@@ -110,8 +96,13 @@ const Popup: FC<IProps> = ({ handlerCreatePost }) => {
   );
 };
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, void, Action>) => ({
-  handlerCreatePost: (model: { author: ILocalAuthor; text: string }) => dispatch(createPost(model)),
+const mapStateToProps = ({ userState }: AppState) => ({
+  user: userState,
 });
 
-export default connect(null, mapDispatchToProps)(Popup);
+const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, void, Action>) => ({
+  handlerCreatePost: (text: string) => dispatch(createPost(text)),
+  handlerCreateUser: (user: IAuthor) => dispatch(createUser(user)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Popup);
